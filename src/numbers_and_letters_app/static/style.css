@@ -1,0 +1,452 @@
+/* ============================================================
+   Reset & Variables
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary:    #FF6B6B;
+  --secondary:  #4ECDC4;
+  --success:    #6BCB77;
+  --retry:      #FF9A3C;
+  --accent:     #A29BFE;
+  --bg:         #EEF2FF;
+  --card-bg:    #FFFFFF;
+  --text:       #2D3561;
+  --muted:      #8892C8;
+  --shadow:     0 8px 40px rgba(45, 53, 97, 0.14);
+  --radius:     20px;
+  --radius-sm:  12px;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+body {
+  font-family: 'Nunito', sans-serif;
+  background: linear-gradient(145deg, #EEF2FF 0%, #FFF0F8 100%);
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+#app {
+  width: 100%;
+  max-width: 520px;
+  min-height: 100dvh;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* ============================================================
+   Screen container
+   ============================================================ */
+.screen {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  animation: fadeUp 0.3s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   Typography
+   ============================================================ */
+.title {
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--muted);
+  text-align: center;
+  font-weight: 600;
+}
+
+.section-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.btn:active {
+  transform: scale(0.96) translateY(2px) !important;
+}
+
+/* Wide buttons */
+.btn-wide {
+  width: 100%;
+  max-width: 360px;
+  font-size: 1.5rem;
+  padding: 20px 32px;
+}
+
+/* Letters & Numbers home buttons */
+.btn-letters {
+  background: linear-gradient(135deg, #FF6B6B, #FF5252);
+  color: #fff;
+  box-shadow: 0 6px 0 #C62828;
+}
+.btn-letters:hover { transform: translateY(-3px); box-shadow: 0 9px 0 #C62828; }
+
+.btn-numbers {
+  background: linear-gradient(135deg, #4ECDC4, #26C6DA);
+  color: #fff;
+  box-shadow: 0 6px 0 #00838F;
+}
+.btn-numbers:hover { transform: translateY(-3px); box-shadow: 0 9px 0 #00838F; }
+
+/* Start / Go */
+.btn-go {
+  background: linear-gradient(135deg, #FFE66D, #FFD600);
+  color: var(--text);
+  box-shadow: 0 6px 0 #F9A825;
+  margin-top: 4px;
+}
+.btn-go:hover { transform: translateY(-3px); box-shadow: 0 9px 0 #F9A825; }
+
+/* Got it */
+.btn-success {
+  background: linear-gradient(135deg, #6BCB77, #43A047);
+  color: #fff;
+  box-shadow: 0 6px 0 #2E7D32;
+  font-size: 1.7rem;
+  padding: 24px 32px;
+}
+.btn-success:hover { transform: translateY(-3px); box-shadow: 0 9px 0 #2E7D32; }
+
+/* Try again */
+.btn-retry {
+  background: linear-gradient(135deg, #FF9A3C, #F57C00);
+  color: #fff;
+  box-shadow: 0 6px 0 #BF360C;
+  font-size: 1.4rem;
+  padding: 20px 32px;
+}
+.btn-retry:hover { transform: translateY(-3px); box-shadow: 0 9px 0 #BF360C; }
+
+/* Play again */
+.btn-again {
+  background: linear-gradient(135deg, #A29BFE, #6C63FF);
+  color: #fff;
+  box-shadow: 0 6px 0 #3D35A8;
+}
+.btn-again:hover { transform: translateY(-3px); box-shadow: 0 9px 0 #3D35A8; }
+
+/* Ghost / back */
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.95rem;
+  padding: 10px 20px;
+  box-shadow: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.btn-ghost:hover { color: var(--text); }
+
+/* ============================================================
+   Config card (white panel)
+   ============================================================ */
+.config-panel {
+  width: 100%;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  box-shadow: var(--shadow);
+}
+
+/* ============================================================
+   Toggle group (pill buttons)
+   ============================================================ */
+.toggle-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.toggle-pill {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 10px 18px;
+  border: 2.5px solid #D8DEFF;
+  border-radius: 50px;
+  background: #F5F7FF;
+  color: var(--muted);
+  cursor: pointer;
+  flex: 1;
+  min-width: 70px;
+  text-align: center;
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+}
+
+.toggle-pill.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #fff;
+}
+
+.toggle-pill.teal.active {
+  border-color: var(--secondary);
+  background: var(--secondary);
+}
+
+/* ============================================================
+   Stepper
+   ============================================================ */
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stepper-btn {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: #EAEEFF;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s ease;
+  touch-action: manipulation;
+}
+.stepper-btn:hover { background: var(--primary); color: #fff; }
+.stepper-btn:active { transform: scale(0.93); }
+
+.stepper-value {
+  font-size: 2rem;
+  font-weight: 900;
+  min-width: 52px;
+  text-align: center;
+  color: var(--text);
+}
+
+/* Range row */
+.range-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.range-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.range-sep {
+  font-size: 1.2rem;
+  color: var(--muted);
+  font-weight: 700;
+  padding-bottom: 10px;
+}
+
+/* ============================================================
+   Game screen
+   ============================================================ */
+#card-area {
+  width: 100%;
+}
+
+.game-meta {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.game-stat {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.progress-track {
+  width: 100%;
+  height: 10px;
+  background: #D8DEFF;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--success), #2E7D32);
+  border-radius: 5px;
+  transition: width 0.5s ease;
+  min-width: 0;
+}
+
+/* ============================================================
+   Flashcard
+   ============================================================ */
+.flashcard {
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 4 / 3;
+  background: var(--card-bg);
+  border-radius: 24px;
+  box-shadow: var(--shadow), 0 1px 0 #C8CCE8;
+  position: relative;
+  animation: cardPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  overflow: hidden;
+}
+
+/* Colorful top stripe */
+.flashcard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+}
+
+@keyframes cardPop {
+  from { opacity: 0; transform: scale(0.82) translateY(24px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+/* SVG glyph fills the card exactly */
+.card-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  user-select: none;
+}
+
+/* Stars */
+.card-stars {
+  position: absolute;
+  bottom: 14px;
+  display: flex;
+  gap: 4px;
+}
+
+.card-star {
+  font-size: 1.25rem;
+  line-height: 1;
+  filter: grayscale(0);
+  transition: transform 0.2s ease;
+}
+
+.card-star.empty {
+  filter: grayscale(1) opacity(0.4);
+}
+
+/* ============================================================
+   Game action buttons
+   ============================================================ */
+.game-actions {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ============================================================
+   Celebration screen
+   ============================================================ */
+.celebration {
+  text-align: center;
+}
+
+.celebration-emoji {
+  font-size: clamp(4rem, 18vw, 6rem);
+  display: block;
+  animation: bigBounce 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes bigBounce {
+  from { transform: translateY(0) scale(1); }
+  to   { transform: translateY(-20px) scale(1.1); }
+}
+
+.celebration-title {
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 900;
+  color: var(--text);
+  margin-top: 16px;
+}
+
+.celebration-sub {
+  font-size: 1.2rem;
+  color: var(--muted);
+  font-weight: 600;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+/* ============================================================
+   Keyboard hint
+   ============================================================ */
+.kbd-hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+  font-weight: 600;
+}
