@@ -306,10 +306,12 @@ body {
    ============================================================ */
 #card-area {
   width: 100%;
+  max-width: 420px;
 }
 
 .game-meta {
   width: 100%;
+  max-width: 420px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -323,6 +325,7 @@ body {
 
 .progress-track {
   width: 100%;
+  max-width: 420px;
   height: 10px;
   background: #D8DEFF;
   border-radius: 5px;
@@ -407,6 +410,7 @@ body {
   max-width: 420px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 12px;
 }
 
