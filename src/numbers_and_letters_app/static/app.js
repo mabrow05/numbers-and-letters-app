@@ -12,6 +12,7 @@ const state = {
     requiredSuccess: 2,
     rangeMin:        0,
     rangeMax:        10,
+    selectedLetters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
   },
 
   deck:       [],   // [{ id, upper?, lower?, value?, successes }]
@@ -45,7 +46,9 @@ function setScreen(name) {
 // ============================================================
 function buildDeck() {
   if (state.mode === 'letters') {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const letters = state.cfg.selectedLetters.length > 0
+      ? state.cfg.selectedLetters
+      : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     state.deck = letters.map(l => ({
       id: l,
       upper: l,
@@ -118,7 +121,7 @@ function renderConfig() {
 }
 
 function renderLettersConfig() {
-  const { letterCase, fontStyle, requiredSuccess } = state.cfg;
+  const { letterCase, fontStyle, requiredSuccess, selectedLetters } = state.cfg;
   const caseOptions = [
     { v: 'upper', label: 'ABC' },
     { v: 'lower', label: 'abc' },
@@ -128,6 +131,9 @@ function renderLettersConfig() {
     { v: 'stick',    label: 'Stick',     style: "font-family:'Andika'" },
     { v: 'dnealian', label: "D'Nealian", style: "font-family:'Patrick Hand'" },
   ];
+  const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const selSet = new Set(selectedLetters);
+  const noneSelected = selectedLetters.length === 0;
 
   return `
     <div class="screen">
@@ -159,11 +165,30 @@ function renderLettersConfig() {
       </div>
 
       <div class="config-panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div class="section-label" style="margin-bottom:0">Letters to include</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn-text-action" data-action="select-all-letters">Select All</button>
+            <button class="btn-text-action" data-action="clear-letters">Clear</button>
+          </div>
+        </div>
+        <div class="letter-grid">
+          ${allLetters.map(l => `
+            <button class="letter-pill ${selSet.has(l) ? 'active' : ''}"
+                    data-action="toggle-letter" data-letter="${l}">
+              ${l}
+            </button>
+          `).join('')}
+        </div>
+        ${noneSelected ? `<div class="letter-picker-warning">Select at least one letter</div>` : ''}
+      </div>
+
+      <div class="config-panel">
         <div class="section-label">Times correct before moving on</div>
         ${renderStepper(requiredSuccess, 'requiredSuccess', 1, 5)}
       </div>
 
-      <button class="btn btn-wide btn-go" data-action="start">🚀 Let's Go!</button>
+      <button class="btn btn-wide btn-go" data-action="start" ${noneSelected ? 'disabled' : ''}>🚀 Let's Go!</button>
       <button class="btn btn-ghost" data-action="home">← Back</button>
     </div>
   `;
@@ -399,7 +424,31 @@ document.getElementById('app').addEventListener('click', (e) => {
       break;
     }
 
+    case 'toggle-letter': {
+      const letter = el.dataset.letter;
+      const idx = state.cfg.selectedLetters.indexOf(letter);
+      if (idx === -1) {
+        state.cfg.selectedLetters.push(letter);
+        state.cfg.selectedLetters.sort();
+      } else {
+        state.cfg.selectedLetters.splice(idx, 1);
+      }
+      renderConfig();
+      break;
+    }
+
+    case 'select-all-letters':
+      state.cfg.selectedLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+      renderConfig();
+      break;
+
+    case 'clear-letters':
+      state.cfg.selectedLetters = [];
+      renderConfig();
+      break;
+
     case 'start':
+      if (el.disabled) break;
       buildDeck();
       setScreen('game');
       break;

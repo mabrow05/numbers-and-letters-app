@@ -244,6 +244,75 @@ body {
 }
 
 /* ============================================================
+   Letter picker
+   ============================================================ */
+.letter-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.letter-pill {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 8px 4px;
+  border: 2.5px solid #D8DEFF;
+  border-radius: 10px;
+  background: #F5F7FF;
+  color: var(--muted);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.12s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.letter-pill.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #fff;
+}
+
+.letter-pill:active {
+  transform: scale(0.92);
+}
+
+.btn-text-action {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  background: none;
+  border: 1.5px solid #D8DEFF;
+  border-radius: 50px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px 12px;
+  transition: all 0.12s ease;
+  touch-action: manipulation;
+}
+
+.btn-text-action:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.letter-picker-warning {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-align: center;
+}
+
+.btn-go:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: 0 6px 0 #F9A825 !important;
+}
+
+/* ============================================================
    Stepper
    ============================================================ */
 .stepper {
