@@ -283,8 +283,10 @@ function buildGlyphSVG(card) {
       <text x="200" y="${lowy}" ${attrs} font-family="${font}" font-size="${lSize}">${card.lower}</text>`;
   } else {
     const display = letterCase === 'upper' ? card.upper : card.lower;
-    const y       = hasStars ? 137 : 162;
-    const size    = hasStars ? 205 : 235;
+    // Lowercase letters have descenders; shift upward so they don't clip the card edge
+    const isLower = letterCase === 'lower';
+    const y    = hasStars ? (isLower ? 112 : 137) : (isLower ? 138 : 162);
+    const size = hasStars ? (isLower ? 182 : 205) : (isLower ? 210 : 235);
     textNodes = `
       <text x="200" y="${y}" ${attrs} font-family="${font}" font-size="${size}">${display}</text>`;
   }
@@ -305,7 +307,7 @@ function fillGameCard() {
   let starsHTML = '';
   if (requiredSuccess > 1) {
     const stars = Array.from({ length: requiredSuccess }, (_, i) =>
-      `<span class="card-star ${i < card.successes ? '' : 'empty'}">⭐</span>`
+      `<span class="card-star ${i < card.successes ? '' : 'empty'}">✓</span>`
     ).join('');
     starsHTML = `<div class="card-stars">${stars}</div>`;
   }

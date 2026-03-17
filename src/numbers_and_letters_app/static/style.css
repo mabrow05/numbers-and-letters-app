@@ -378,23 +378,25 @@ body {
   user-select: none;
 }
 
-/* Stars */
+/* Check marks */
 .card-stars {
   position: absolute;
   bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  gap: 4px;
+  gap: 6px;
 }
 
 .card-star {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
+  font-weight: 900;
   line-height: 1;
-  filter: grayscale(0);
-  transition: transform 0.2s ease;
+  color: #6BCB77;
 }
 
 .card-star.empty {
-  filter: grayscale(1) opacity(0.4);
+  color: #D8DEFF;
 }
 
 /* ============================================================
