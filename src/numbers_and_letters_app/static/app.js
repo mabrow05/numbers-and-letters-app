@@ -38,7 +38,9 @@ function reinsert(card) {
 
 function setScreen(name) {
   state.screen = name;
+  state._transitioning = true;
   render();
+  state._transitioning = false;
 }
 
 // ============================================================
@@ -95,7 +97,7 @@ function tryAgain() {
 // ============================================================
 function renderHome() {
   document.getElementById('app').innerHTML = `
-    <div class="screen">
+    <div class="screen screen-enter">
       <div class="title">Letters &amp;<br>Numbers</div>
       <div class="subtitle">Choose a game to get started!</div>
 
@@ -136,7 +138,7 @@ function renderLettersConfig() {
   const noneSelected = selectedLetters.length === 0;
 
   return `
-    <div class="screen">
+    <div class="${state._transitioning ? 'screen screen-enter' : 'screen'}">
       <div class="title" style="font-size:1.8rem">🔤 Letter Settings</div>
 
       <div class="config-panel">
@@ -180,7 +182,7 @@ function renderLettersConfig() {
             </button>
           `).join('')}
         </div>
-        ${noneSelected ? `<div class="letter-picker-warning">Select at least one letter</div>` : ''}
+        <div class="letter-picker-warning" style="${noneSelected ? '' : 'visibility:hidden'}">Select at least one letter</div>
       </div>
 
       <div class="config-panel">
@@ -197,7 +199,7 @@ function renderLettersConfig() {
 function renderNumbersConfig() {
   const { rangeMin, rangeMax, requiredSuccess } = state.cfg;
   return `
-    <div class="screen">
+    <div class="${state._transitioning ? 'screen screen-enter' : 'screen'}">
       <div class="title" style="font-size:1.8rem">🔢 Number Settings</div>
 
       <div class="config-panel">
@@ -224,6 +226,14 @@ function renderNumbersConfig() {
       <button class="btn btn-ghost" data-action="home">← Back</button>
     </div>
   `;
+}
+
+function updateLetterPickerUI() {
+  const noneSelected = state.cfg.selectedLetters.length === 0;
+  const btn = document.querySelector('[data-action="start"]');
+  if (btn) btn.disabled = noneSelected;
+  const warning = document.querySelector('.letter-picker-warning');
+  if (warning) warning.style.visibility = noneSelected ? '' : 'hidden';
 }
 
 function renderStepper(value, key, min, max) {
@@ -433,18 +443,21 @@ document.getElementById('app').addEventListener('click', (e) => {
       } else {
         state.cfg.selectedLetters.splice(idx, 1);
       }
-      renderConfig();
+      el.classList.toggle('active', idx === -1);
+      updateLetterPickerUI();
       break;
     }
 
     case 'select-all-letters':
       state.cfg.selectedLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-      renderConfig();
+      document.querySelectorAll('.letter-pill').forEach(p => p.classList.add('active'));
+      updateLetterPickerUI();
       break;
 
     case 'clear-letters':
       state.cfg.selectedLetters = [];
-      renderConfig();
+      document.querySelectorAll('.letter-pill').forEach(p => p.classList.remove('active'));
+      updateLetterPickerUI();
       break;
 
     case 'start':
