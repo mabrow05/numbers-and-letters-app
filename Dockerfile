@@ -4,7 +4,7 @@ FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim AS builder
 WORKDIR /app
 
 # Copy project metadata and source, then sync
-COPY pyproject.toml ./
+COPY pyproject.toml README.md ./
 COPY src/ src/
 
 RUN uv sync --no-dev
